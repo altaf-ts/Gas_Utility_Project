@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Status</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+            width: 80%;
+            margin-top: 20px;
+        }
+
+        li {
+            margin: 10px 0;
+            padding: 15px;
+            background-color: #f4f4f4;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .resolved {
+            background-color: #d4edda;
+        }
+
+        .unresolved {
+            background-color: #f8d7da;
+        }
+
+        strong {
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        span {
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        p {
+            color: #999;
+            font-size: 1rem;
+        }
+
+        /* Adding responsiveness */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            ul {
+                width: 100%;
+            }
+
+            li {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Request Status</h1>
+    
+    {% if requests %}
+        <ul>
+            {% for request in requests %}
+                <li class="{% if request.status == 'Resolved' %}resolved{% else %}unresolved{% endif %}">
+                    <strong>{{ request.service_type }}</strong> - {{ request.status }} <br>
+                    <span>Submitted: {{ request.request_date }} | Resolved: {{ request.resolution_date|default:"N/A" }}</span>
+                    <br>
+                    <a href="{% url 'update_status' request.id %}">Update Status</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No requests found.</p>
+    {% endif %}
+</body>
+</html>
